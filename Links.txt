@@ -29,10 +29,10 @@
 ссылка29 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language#nullable
 ссылка30 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#nowarn
 ссылка31 - https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/null-safety/common-tasks/resolve-warnings
-ссылка32 - 
-ссылка33 - 
-ссылка34 - 
-ссылка35 - 
-ссылка36 - 
+ссылка32 - https://www.youtube.com/watch?v=jFSSV1pdZTw
+ссылка33 - https://www.youtube.com/watch?v=nQTQKxG-edY
+ссылка34 - https://pvs-studio.ru/ru/blog/posts/0743/
+ссылка35 - https://habr.com/ru/companies/solarsecurity/articles/472886/
+ссылка36 - https://habr.com/ru/companies/solarsecurity/articles/424255/
 ссылка37 - 
 
