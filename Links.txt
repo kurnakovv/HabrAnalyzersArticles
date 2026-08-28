@@ -1,0 +1,38 @@
+ссылка1 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#treatwarningsaserrors
+ссылка2 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview?tabs=net-10
+ссылка3 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/
+ссылка4 - https://github.com/dotnetanalyzers/stylecopanalyzers
+ссылка5 - https://josefpihrt.github.io/docs/roslynator/
+ссылка6 - https://www.jetbrains.com/help/resharper/InspectCode.html
+ссылка7 - https://github.com/kurnakovv/kuker
+ссылка8 - https://gist.github.com/kurnakovv
+ссылка9 - https://github.com/dotnet/docs/pulls?q=is%3Apr+is%3Aclosed+author%3Akurnakovv+
+ссылка10 - https://github.com/kurnakovv/biak
+ссылка11 - https://stackoverflow.com/questions/76811069/change-the-severity-of-all-stylecop-rules-using-editorconfig
+ссылка12 - https://habr.com/ru/companies/pvs-studio/articles/934666/
+ссылка13 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0160-ide0161
+ссылка14 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0072
+ссылка15 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0010
+ссылка16 - https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
+ссылка17 - https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/maintaining-ownership-continuity-for-your-organization
+ссылка18 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options#severity-level
+ссылка19 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#treatwarningsaserrors
+ссылка20 - https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=visualstudio#directorybuildprops-and-directorybuildtargets
+ссылка21 - https://github.com/kurnakovv/biak/wiki/WarningsBaselineOverview
+ссылка22 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/preprocessor-directives#pragmas
+ссылка23 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/required
+ссылка24 - https://learn.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#navigating-and-including-nullable-relationships
+ссылка25 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1307
+ссылка26 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-messages/cs0618
+ссылка27 - https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/update-applications/nullable-migration-strategies#choose-a-default-context
+ссылка28 - https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/update-applications/nullable-migration-strategies#migrate-file-by-file
+ссылка29 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language#nullable
+ссылка30 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#nowarn
+ссылка31 - https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/null-safety/common-tasks/resolve-warnings
+ссылка32 - 
+ссылка33 - 
+ссылка34 - 
+ссылка35 - 
+ссылка36 - 
+ссылка37 - 
+
