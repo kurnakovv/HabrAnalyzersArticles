@@ -489,8 +489,6 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
 <WarningsNotAsErrors>0219;CS0168;nullable</WarningsNotAsErrors>
 ```
 
-Directory.Build.props имеет приоритет над .editorconfig, т.е. сначала оно смотрит в Directory.Build.props, и если там указано правило, то в .editorconfig уже не смотрит. В противном случае переходит к .editorconfig (csproj -> Directory.Build.props -> .editorconfig).
-
 Ещё один минус данного способа в том, что он отключает варнинги для всего файла целиком. Если в этих же файлах появятся новые варнинги, то они также будут подавлены. Так что я ещё раз повторюсь: warning baseline нужно потихоньку чистить, а не оставлять на несколько лет.
 
 Подробнее про этот функционал [ссылка21].
