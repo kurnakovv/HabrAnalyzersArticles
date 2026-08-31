@@ -34,5 +34,6 @@
 ссылка34 - https://pvs-studio.ru/ru/blog/posts/0743/
 ссылка35 - https://habr.com/ru/companies/solarsecurity/articles/472886/
 ссылка36 - https://habr.com/ru/companies/solarsecurity/articles/424255/
-ссылка37 - 
+ссылка37 - https://github.com/dotnet/sdk
+ссылка38 - https://github.com/dotnet/runtime
 
