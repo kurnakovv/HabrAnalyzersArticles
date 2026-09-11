@@ -37,3 +37,4 @@
 ссылка37 - https://github.com/dotnet/sdk
 ссылка38 - https://github.com/dotnet/runtime
 ссылка39 - https://www.reddit.com/r/dotnet/comments/1k5hsea/comment/moz4kc4/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+ссылка40 - https://github.com/belav/csharpier
