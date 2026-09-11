@@ -117,7 +117,7 @@ CSharpier is an opinionated formatter which does not provide options. The point 
 The "Why Prettier" page does a better job than I can of explaining the benefits - https://prettier.io/docs/why-prettier
 ```
 
-Посыл: у вас нет выбора, мы всё за вас решили. Пользуйтесь и не жужжите!
+Посыл: "У вас нет выбора, мы всё за вас решили. Пользуйтесь и не жужжите!"
 Допустим команде нравятся ~80% правил, но почему мы должны "схавать" оставшиеся? Например:
 
 ```cs
