@@ -34,7 +34,7 @@
 # TL;DR
 * Проект | ~1800 C# файлов и 8 бэкенд/фулстэк разработчиков.
 
-* Внедрены | TreatWarningsAsErrors, CA/IDE, StyleCop, Roslynator, InspectCode, собственный анализатор и инструмент для работы с .editorconfig файлом.
+* Внедрены | TreatWarningsAsErrors, CA/IDE, StyleCop, Roslynator, dotnet-format, InspectCode, собственный анализатор и инструмент для работы с .editorconfig файлом.
 
 * Главный вывод | Бегите, глупцы! Пока не поздно...
 
