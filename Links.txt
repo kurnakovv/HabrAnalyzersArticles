@@ -40,3 +40,4 @@
 ссылка40 - https://github.com/belav/csharpier
 ссылка41 - https://csharpier.com/docs/Configuration
 ссылка42 - https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format
+ссылка43 - https://habr.com/ru/companies/pvs-studio/articles/196312/
