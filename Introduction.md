@@ -353,7 +353,10 @@
 
 Давайте настроим проверку билда для каждого коммита и запретим прямой пуш в главную ветку - изменения должны попадать туда только через PR.
 Для этого создадим файл `.github/workflows/dotnet.yml` со следующим содержимым:
-```yml
+
+<spoiler title="Пример простого GitHub Actions для .NET сборки и тестирования">
+
+```yaml
 name: .NET Build and Test
 
 on:
@@ -395,6 +398,8 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 ```
 
+</spoiler>
+
 Теперь сделаем продовую ветку read-only (UI может поменяться) [ссылка16].
 Переходим в Settings -> (Code, planning, and automation) Rulesets:
 
@@ -418,7 +423,7 @@ Rules: тут вы можете поиграться как хотите, но �
 И указываем конкретные экшины. Чтобы их указать, берём название джоба (например, `build`).
 
 `.github/workflows/dotnet.yml`:
-```yml
+```yaml
 ...
 
 jobs:
@@ -514,6 +519,9 @@ warning_key = suggestion # ^biak^ baseline
 ```
 
 И выведет их в терминал, примерно так:
+
+<spoiler title="Пример вывода .editorconfig конфигураций после команды">
+
 ```.editorconfig
 [{VisualBasicProject/Module1.vb}]
 dotnet_diagnostic.BC40000.severity = suggestion # ^biak^ baseline
@@ -539,6 +547,8 @@ dotnet_diagnostic.CS0649.severity = suggestion # ^biak^ baseline
 [{MyTestForlder/MyTestModel1.cs,MyTestModel.cs}]
 dotnet_diagnostic.CS8618.severity = suggestion # ^biak^ baseline
 ```
+
+</spoiler>
 
 Далее возьмите это содержимое, создайте .editorconfig и вставьте его в файл. Файл .editorconfig должен лежать в одном каталоге с решением (.sln / .slnx).
 
@@ -601,7 +611,7 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
   ```
 
   И добавить переменную TREAT_WARNINGS_AS_ERRORS в GitHub action:
-  ```yml
+  ```yaml
   jobs:
     build:
       runs-on: ubuntu-latest
@@ -615,7 +625,8 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
 
 * NoWarn | Есть ситуации, когда варнинг нужно отключить полностью. Особенно когда никак нельзя повлиять на специфику некоторых библиотек или фреймворков. Или же когда проект будет удалён в ближайшем будущем и чинить текущие варнинги нет необходимости.
 
-  Например, для пакетов:
+  <spoiler title="Пример использования NoWarn для конкретных пакетов">
+
   ```xml
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.6.0" />
@@ -632,11 +643,13 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
     </ItemGroup>
   ```
 
-  Для легаси проекта мы сделали так, потому что этим функционалом уже никто не пользовался, а нужен он был только для обратной совместимости:
+  </spoiler>
+
+  А вот пример глобального отключения варнингов [ссылка30]:
   ```xml
   <NoWarn>$(NoWarn);1591,1573</NoWarn>
   ```
-  [ссылка30]
+  Для легаси проекта мы сделали так, потому что этим функционалом уже никто не пользовался, а нужен он был только для обратной совместимости.
 
 * Точечные подавления | Есть места в коде, где варнинг сработал как false positive, но отключать его глобально не стоит.
 
@@ -699,7 +712,10 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
   return user!.Name;
   ```
 
-  Также можно через атрибуты указывать поведение, связанное с null, например:
+  Также можно через атрибуты [ссылка44] указывать поведение, связанное с null.
+  
+  <spoiler title="Пример использования NotNullWhen атрибута">
+
   ```cs
   // Сигнатура метода берёт на себя ответственность за то, что если возвращаемое значение будет true, то message не будет null.
   bool TryGetMessage(string key, [NotNullWhen(true)] out string? message)
@@ -726,7 +742,8 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
       int length = message.Length; // CS8602: Dereference of a possibly null reference
   }
   ```
-  Этот способ я никогда не использовал, но в целом он позволяет упростить код и снизить количество false positive.
+
+  </spoiler>
 
 
 <anchor>способ_миграции_в_доке_подход_file_by_file</anchor>

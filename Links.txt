@@ -41,3 +41,4 @@
 ссылка41 - https://csharpier.com/docs/Configuration
 ссылка42 - https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format
 ссылка43 - https://habr.com/ru/companies/pvs-studio/articles/196312/
+ссылка44 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis
