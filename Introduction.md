@@ -513,7 +513,7 @@ dotnet biak warnings-baseline init
 Она запустит билд, возьмет все варнинги и сгенерирует фильтры:
 ```.editorconfig
 [{files}]
-warning_key = suggestion # ^biak^ baseline
+warning_key = suggestion # ^biak^ warnings-baseline
 
 ...
 ```
@@ -524,28 +524,28 @@ warning_key = suggestion # ^biak^ baseline
 
 ```.editorconfig
 [{VisualBasicProject/Module1.vb}]
-dotnet_diagnostic.BC40000.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.BC40000.severity = suggestion # ^biak^ warnings-baseline
 
 [{DerivedClassCS0649.cs}]
-dotnet_diagnostic.CS0108.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS0108.severity = suggestion # ^biak^ warnings-baseline
 
 [{ProgramCS0168Warning.cs}]
-dotnet_diagnostic.CS0168.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS0168.severity = suggestion # ^biak^ warnings-baseline
 
 [{MyClassCS0169.cs}]
-dotnet_diagnostic.CS0169.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS0169.severity = suggestion # ^biak^ warnings-baseline
 
 [{ProgramCS0219Warning.cs}]
-dotnet_diagnostic.CS0219.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS0219.severity = suggestion # ^biak^ warnings-baseline
 
 [{ProgramCS0612.cs}]
-dotnet_diagnostic.CS0612.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS0612.severity = suggestion # ^biak^ warnings-baseline
 
 [{DerivedClassCS0649.cs}]
-dotnet_diagnostic.CS0649.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS0649.severity = suggestion # ^biak^ warnings-baseline
 
 [{MyTestForlder/MyTestModel1.cs,MyTestModel.cs}]
-dotnet_diagnostic.CS8618.severity = suggestion # ^biak^ baseline
+dotnet_diagnostic.CS8618.severity = suggestion # ^biak^ warnings-baseline
 ```
 
 </spoiler>
