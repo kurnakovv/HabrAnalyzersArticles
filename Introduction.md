@@ -88,7 +88,7 @@
 # Кто я и что за проект
 Я синьор разработчик, работаю с 2021 года, а с 2025 года начал активно изучать тему анализаторов: как сделать код лучше и чище с помощью автоматизации. Наш проект на момент активного внедрения содержал ~1800 C# файлов и 8 бэкенд/фулстэк разработчиков. Это не монорепозиторий, и задачи пересекались между собой. Если ваш проект больше, то не стоит переживать: я постарался собрать советы и для крупных легаси проектов, и для стартапов.
 
-В наш проект мы смогли внедрить: [TreatWarningsAsErrors](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#treatwarningsaserrors), [Code quality analysis ("CAxxxx")](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview?tabs=net-10), [Code-style rules (IDExxxx)](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/), [StyleCop](https://github.com/dotnetanalyzers/stylecopanalyzers), [dotnet-format](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format), [Roslynator](https://josefpihrt.github.io/docs/roslynator/), [InspectCode](https://www.jetbrains.com/help/resharper/InspectCode.html) и [собственный анализатор для выявления специфичных кейсов](https://github.com/kurnakovv/kuker).
+В наш проект мы смогли внедрить: [TreatWarningsAsErrors](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#treatwarningsaserrors), [Code quality analysis ("CAxxxx")](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview?tabs=net-10), [Code-style rules (IDExxxx)](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/), [StyleCop](https://github.com/dotnetanalyzers/stylecopanalyzers), [dotnet-format](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format), [Roslynator](https://josefpihrt.github.io/docs/roslynator/), [InspectCode](https://www.jetbrains.com/help/resharper/InspectCode.html) и [собственный анализатор](https://github.com/kurnakovv/kuker) для выявления специфичных кейсов.
 
 Я собрал несколько тысяч правил из популярных анализаторов, рассмотрел каждое из них и составил [список любимых правил](https://gist.github.com/kurnakovv), которые, с моей точки зрения, действительно можно с пользой применять на проекте. По ходу изучения я добавлял примеры кода в [документацию от Майкрософт](https://github.com/dotnet/docs/pulls?q=is%3Apr+is%3Aclosed+author%3Akurnakovv+). А ещё создал [инструмент](https://github.com/kurnakovv/biak), который позволяет расширить возможности .editorconfig для .NET приложений.
 
@@ -136,9 +136,9 @@
 # Проблемы с миром анализаторов (крик души)
 Когда я только начинал изучать этот вопрос, от количества инструментов у меня разбегались глаза: StyleCop / PVS Studio / dotnet format / Visual Studio Code Cleanup / ReSharper / Roslyn / Roslynator / .editorconfig / CSharpier / варнинги при билде / подсказки в Visual Studio и т. д. Так много инструментов и так мало объяснений - как их использовать и зачем.
 
-Чуть позже я нашёл [ответ на SOF](https://stackoverflow.com/questions/76811069/change-the-severity-of-all-stylecop-rules-using-editorconfig), но было слишком поздно.
+Попробовав тот же StyleCop, я получил ~15к нарушений в нашем проекте и думал: "Как же мы всё это внедрим в наш проект? Может быть, бросить эту затею вовсе?" Решил попробовать выключить все правила и включить точечно несколько, но в документации не говорилось, как это сделать. Чуть позже я нашёл [ответ на SOF](https://stackoverflow.com/questions/76811069/change-the-severity-of-all-stylecop-rules-using-editorconfig), но было слишком поздно.
 
-Самый яркий пример - это [CSharpier](https://github.com/belav/csharpier).
+И если вы думаете, что эта проблема была только у StyleCop, то вы ошибаетесь. Почти каждый популярный анализатор агрессивно навязывает полное подключение. Почему-то они считают, что все их правила очень полезны и должны быть включены по умолчанию. Самый яркий пример - это [CSharpier](https://github.com/belav/csharpier).
 
 [Цитата](https://www.reddit.com/r/dotnet/comments/1k5hsea/comment/moz4kc4/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
 > CSharpier is an opinionated formatter which does not provide options. The point is to format your code without any input from you and to avoid teams getting into debates about which options to set which way.
@@ -147,9 +147,9 @@
 
 Посыл: "У вас нет выбора, мы всё за вас решили. Пользуйтесь и не жужжите!" Возможно, философия CSharpier кому-то близка, т.к. и она имеет свои плюсы, но лично для меня важнее, чтобы продукт можно было настроить под команду.
 
-> **Уточнение:** CSharpier всё же имеет [минимальный набор настроек](https://csharpier.com/docs/Configuration), что позволяет
+> **Уточнение:** CSharpier всё же имеет [минимальный набор настроек](https://csharpier.com/docs/Configuration), что позволяет немного скорректировать форматирование, но принципиально это не влияет на философию продукта.
 
-У него есть [система baseline](https://habr.com/ru/companies/pvs-studio/articles/934666/), позволяющая внедрить его практически сразу. Также команда пишет много полезных статей о его работе. Но есть важный нюанс: цена кусается. Не каждая компания готова [платить за инструмент сумму, сопоставимую с зарплатой синьора в месяц](https://habr.com/ru/companies/pvs-studio/articles/196312/). За хороший продукт приходится платить.
+Также многие инструменты считают, что их будут внедрять только на начальном этапе, а для легаси и так всё потеряно. Многие, но не все - лучше всего об этой проблеме, на мой взгляд, позаботился PVS Studio. У него есть [система baseline](https://habr.com/ru/companies/pvs-studio/articles/934666/), позволяющая внедрить его практически сразу. Также команда пишет много полезных статей о его работе. Но есть важный нюанс: цена кусается. Не каждая компания готова [платить за инструмент сумму, сопоставимую с зарплатой синьора в месяц](https://habr.com/ru/companies/pvs-studio/articles/196312/). За хороший продукт приходится платить.
 
 Хорошо, а как дела со статьями и обучающими материалами? Тоже всё очень плохо. Всё также рассчитано на новые проекты, по принципу: "Скачай NuGet пакеты Roslynator & StyleCop, запусти dotnet format и вуаля! Твой проект станет идеальным!" Но никто не говорит о том, что некоторые правила могут не подойти вашему проекту или команде. Никто не говорит про git конфликты с текущей командой, и что если применить все правила и попытаться залить какую-нибудь ветку, то вы получите 71 git конфликт!
 
@@ -178,7 +178,7 @@
 ## Плюсы
 * Меньше багов | Анализаторы ловят баги, которые не всегда можно заметить глазами на ревью.
 
-Особенно это заметно на правилах <abbr title="IDE0160: Use block scoped namespace.">IDE0160</abbr> и <abbr title="IDE0161: Use file scoped namespace.">IDE0161</abbr>.
+* Меньше git конфликтов | Если кто-то решит отрефакторить код, то могут возникнуть git конфликты, из-за чего как минимум замедлится задача (т.к. нужно исправить конфликты и всё протестировать), а как максимум - конфликты можно неправильно решить из-за незнания, и, как следствие, появятся баги. Если же мы изначально заставляем программистов писать отрефакторенный код, то таких проблем возникает меньше, т.к. уменьшается количество массовых рефакторингов. Особенно это заметно на правилах <abbr title="IDE0160: Use block scoped namespace.">IDE0160</abbr> и <abbr title="IDE0161: Use file scoped namespace.">IDE0161</abbr>.
 
 * Ускорение ревью | Ревьюеру не приходится тратить время на мелкие замечания, из-за чего ревью значительно ускоряется. Также у ревьюера появляется больше времени и сил, чтобы сфокусироваться на бизнес логике.
 
@@ -204,13 +204,13 @@
 
   Эту проблему мы решили за счёт инструмента, который позволяет включать и выключать все правила. А также есть решение из коробки. Об этом мы поговорим в будущих статьях.
 
-Если посмотреть на [dotnet/sdk](https://github.com/dotnet/sdk), то там пайплайны длятся и по ~1.5 часа, а в [dotnet/runtime](https://github.com/dotnet/runtime) - и вовсе до ~10 часов.
+* CI/CD стал медленнее | Тут всё зависит от ваших мощностей и количества анализаторов, но так или иначе они замедляют пайплайны, и приходится ждать намного дольше, чем обычно. В нашем проекте больше всего времени уходит на InspectCode, который работает по ~15 минут. Но это ещё цветочки. Если посмотреть на [dotnet/sdk](https://github.com/dotnet/sdk), то там пайплайны длятся и по ~1.5 часа, а в [dotnet/runtime](https://github.com/dotnet/runtime) - и вовсе до ~10 часов. Да, в основном такое замедление происходит из-за тестов, но всё это - совокупность всех проверок. При этом важно понимать, что анализаторы - лишь одна из составляющих времени CI/CD: чем больше проверок мы добавляем, тем выше становится общая стоимость pipeline.
 
-[Автор данной статьи](https://pvs-studio.ru/ru/blog/posts/0743/) ссылается на то, что количество false positive составляет примерно ~10–15%.
+* Ложные срабатывания | Бывает такое, что правило отлично срабатывает в 99% случаев, но есть тот самый 1%, в котором это правило приводит к ложному срабатыванию (false positive). С этим нужно либо смириться, либо использовать фильтр, либо вовсе убрать правило. [Автор данной статьи](https://pvs-studio.ru/ru/blog/posts/0743/) ссылается на то, что количество false positive составляет примерно ~10–15%. Тут сложно судить точно, т.к. всё зависит от инструмента и условий написания кода. Но факт остаётся фактом: false positive не избежать.
 
 * Борьба с начальством | Очень сложно объяснить начальству, что внедрение анализаторов - это важно, т.к. вместо того, чтобы красить кнопки и создавать CRUD-ы, вы, по их мнению, страдаете ерундой, ведь вроде бы ничего не происходит.
 
-Мы внедрили <abbr title="IDE0072: Add missing cases to switch expression.">IDE0072</abbr> и думали, что все кейсы покрыты, а оказалось, что ещё есть <abbr title="IDE0010: Add missing cases to switch statement.">IDE0010</abbr>, чего мы совсем не ожидали.
+* Контроль - это иллюзия | Внедряя анализаторы, вы всё больше и больше приходите к мысли, что если анализаторы не наругались на вас, значит, всё хорошо. То есть мозг начинает расслабляться и всё больше и больше доверять анализатору. Это было и у нас. Мы внедрили <abbr title="IDE0072: Add missing cases to switch expression.">IDE0072</abbr> и думали, что все кейсы покрыты, а оказалось, что ещё есть <abbr title="IDE0010: Add missing cases to switch statement.">IDE0010</abbr>, чего мы совсем не ожидали (это было на начальном этапе, пока я не проверил все правила).
 
 * Нужно время на внедрение и подбор правил под вашу команду | Нельзя нажать 2 кнопки, чтобы сразу всё заработало. Нужно подстраивать правила под тип проекта и команду, а также спрашивать мнение большинства. Где-то команда топит за использование `var`, где-то за явное использование типов. Где-то нужно использовать `.ConfigureAwait(false)`, а где-то уже не нужно и т. д. Ну и чем больше легаси код, тем сложнее их внедрить. Так что внедрение анализаторов - это тоже работа. Хотя изначально я думал: "Вот сделаю список всех самых наилучших правил и будет всем счастье", но нет, увы. Благо большинство правил будут полезны везде, так что вам не придется сидеть над каждым правилом и думать: а нужно ли его включить или нет?
 
@@ -412,7 +412,7 @@ Target branches: main, dev (те ветки, на которые хотим пр
 Rules: тут вы можете поиграться как хотите, но основные правила я бы оставил следующими
 * Require a pull request before merging | Запрет прямого пуша в выбранную ветку, только через PR
   * Dismiss stale pull request approvals when new commits are pushed | При новых коммитах нужно провести ревью повторно.
-  В организации можно [сделать несколько овнеров](https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/maintaining-ownership-continuity-for-your-organization).
+  * Require review from Code Owners | Обязательное ревью от овнера(ов). В организации можно [сделать несколько овнеров](https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/maintaining-ownership-continuity-for-your-organization).
   * Require approval of the most recent reviewable push | Нужно ли, чтобы кто-то другой проверил крайний коммит (полезно для овнеров, чтобы они не проверяли сами себя). Если вы один на проекте, то этот флаг бесполезен.
   * Require conversation resolution before merging | Все комментарии по коду в PR должны быть закрыты.
 
@@ -480,7 +480,7 @@ remote: - Required status check "build" is expected.
 
 * suggestion | То же самое, что и warning, только при билде сообщение не будет выведено в output. Получить информацию об этих нарушениях можно, например, через IDE или через dotnet format. В IDE это сообщение будет отображаться только если файл с нарушением открыт.
 
-этот уровень можно применять только для правил форматирования и стилей ([code style](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/)), при наличии соответствующего code fix.
+* silent | Нигде не выводится и не отображается, но при запуске dotnet format или Code Cleanup правило будет исправлено. Важно, что этот уровень можно применять только для правил форматирования и стилей ([code style](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/)), при наличии соответствующего code fix.
 
 * default | Вернуть для правила уровень severity, заданный по умолчанию. Полезно, когда для конкретного правила ранее было задано другое значение и вы хотите вернуться к стандартному поведению. Например, при включённом TreatWarningsAsErrors это позволяет для конкретного правила вернуть его исходный уровень warning (т.к. в данном случае если просто сделать warning, то уровень severity будет иметь значение error).
 
@@ -755,7 +755,7 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
 <anchor>способ_миграции_в_доке_подход_file_by_file</anchor>
 
 # Способ миграции в доке | подход "File by file"
-Например, для начала [внедрить nullable варнинги](https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/update-applications/nullable-migration-strategies#choose-a-default-context).
+Честно, мне этот способ не нравится от слова совсем, но если вам не подходит мой вариант, а избежать варнингов хочется, то стоит подумать в эту сторону. Например, для начала [внедрить nullable варнинги](https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/update-applications/nullable-migration-strategies#choose-a-default-context).
 
 Включим nullable:
 ```xml
@@ -823,12 +823,12 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
 <anchor>почему_люди_оставляют_варнинги</anchor>
 
 # Почему люди оставляют варнинги?
-Например, до .NET 7 не было [ключевого слова "required"](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/required) для свойств:
+Иногда масштаб трагедии настолько велик, что false positive одной конкретной ошибки может как домино обрушить всю мотивацию чинить варнинги. Например, до .NET 7 не было [ключевого слова "required"](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/required) для свойств:
 ```cs
 public required string Name { get; set; }
 ```
 
-а если какой-то фреймворк не поддерживал такой формат, например, [навигационные свойства в EF](https://learn.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#navigating-and-including-nullable-relationships), то приходилось писать такие костыли:
+Приходилось писать через конструкторы + read-only свойства, а если какой-то фреймворк не поддерживал такой формат, например, [навигационные свойства в EF](https://learn.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#navigating-and-including-nullable-relationships), то приходилось писать такие костыли:
 ```cs
 public Company Company { get; set; } = null!;
 ```
