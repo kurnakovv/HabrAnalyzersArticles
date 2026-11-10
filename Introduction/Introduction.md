@@ -151,7 +151,7 @@
 
 Хорошо, а как дела со статьями и обучающими материалами? Тоже всё очень плохо. Всё также рассчитано на новые проекты, по принципу: "Скачай NuGet пакеты Roslynator & StyleCop, запусти dotnet format и вуаля! Твой проект станет идеальным!" Но никто не говорит о том, что некоторые правила могут не подойти вашему проекту или команде. Никто не говорит про git конфликты с текущей командой, и что если применить все правила и попытаться залить какую-нибудь ветку, то вы получите 71 git конфликт!
 
-![1.png](img/1.png)
+![71 git конфликт](https://raw.githubusercontent.com/kurnakovv/HabrAnalyzersArticles/refs/heads/main/Introduction/img/1GitConflicts.png)
 
 Никто не говорит, что делать, если кто-то из команды не хочет внедрять правила и не хочет, чтобы их "индивидуальность" как-то задевали. Никто не говорит, что начальству абсолютно наплевать на красоту кода: главное, чтобы задачи вовремя закрывались и заработок шёл. А то, что вы в говнокоде варитесь, их не волнует. Все живут в мире радужных пони, где всё красиво и удобно.
 
@@ -197,7 +197,7 @@
 
   Комментарий негодования от коллеги:
 
-  ![6.png](img/6.png)
+  ![Нагрузка CPU от анализаторов](https://raw.githubusercontent.com/kurnakovv/HabrAnalyzersArticles/refs/heads/main/Introduction/img/6CPU.png)
   > Очень занимательно смотреть на то, как статический анализ выжигает проц после очередного ввода символа в коде, который был введен с целью устранить красноту вполне валидного кода, чтобы он перестал быть красным, но он перестает быть красным ещё 10 секунд. Скоро придется пересаживаться с Ryzen 7 8845HS на Звезду Смерти, чтобы подсветка синтаксиса работала быстрее.
 
   Эту проблему мы решили за счёт инструмента, который позволяет включать и выключать все правила. А также есть решение из коробки. Об этом мы поговорим в будущих статьях.
@@ -328,7 +328,7 @@
 ```
 Реальный пример:
 
-![2.png](img/2.png)
+![Пример голосования за стиль именования констант](https://raw.githubusercontent.com/kurnakovv/HabrAnalyzersArticles/refs/heads/main/Introduction/img/2Vote.png)
 
 Какой вариант побеждает, такой и выбираете, даже если вам лично он не нравится.
 
@@ -399,7 +399,7 @@ jobs:
 Теперь сделаем [продовую ветку read-only](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule) (UI может поменяться).
 Переходим в Settings -> (Code, planning, and automation) Rulesets:
 
-![3.png](img/3.png)
+![Rulesets UI](https://raw.githubusercontent.com/kurnakovv/HabrAnalyzersArticles/refs/heads/main/Introduction/img/3RulesetsUI.png)
 
 Детали, на которые стоит обратить внимание:
 Enforcement status: Active (обязательно включить, т.к. по умолчанию выключена).
@@ -428,7 +428,7 @@ jobs:
 ...
 ```
 
-![4.png](img/4.png)
+![Как добавить обязательную проверку build](https://raw.githubusercontent.com/kurnakovv/HabrAnalyzersArticles/refs/heads/main/Introduction/img/4RequireStatusChecks.png)
 
 Теперь сохраним наше правило и попробуем запушить в указанную ветку (main в нашем случае):
 
@@ -464,7 +464,7 @@ remote: - Required status check "build" is expected.
 # Варнинги | подход "Baseline"
 Варнинги... Как сильно все мы их любим, особенно мы любим их игнорировать :)
 
-![5.jpg](img/5.jpg)
+![Мем про большое количество варнингов](https://raw.githubusercontent.com/kurnakovv/HabrAnalyzersArticles/refs/heads/main/Introduction/img/5WarningsMeme.jpg)
 
 Тем не менее, нужно понимать, что все варнинги - это технический долг, который нужно либо закрывать, либо точечно и обоснованно подавлять.
 
