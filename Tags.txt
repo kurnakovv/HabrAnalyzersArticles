@@ -1,0 +1,7 @@
+* анализаторы
+* статический анализ кода
+* анализ кода
+* static code analysis
+* C#
+* open source
+* .net
