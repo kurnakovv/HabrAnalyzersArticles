@@ -836,7 +836,7 @@ public Company Company { get; set; } = null!;
 Ещё я рекомендую вам посмотреть на все текущие варнинги. Если вы понимаете, что не собираетесь их чинить, то лучше вовсе их отключите.
 Возьмем для примера <abbr title="CA1307: Specify StringComparison for clarity.">CA1307</abbr>: если у вас простенькое приложение, которое не зависит от сравнения строк, то можно отключить это правило глобально, т.к. оно может только раздражать, каждый раз заставляя указывать StringComparison (подробнее правила анализатора разберем в следующих статьях).
 
-Также, если вы понимаете, что в ближайшее время варнинг починить не получится, например, вы добавили атрибут [Obsolete], а затем вылетело много <abbr title="CS0618: A class member was marked with the Obsolete attribute, such that a warning will be issued when the class member is referenced.">CS0618</abbr> варнингов, то лучше будет обернуть все места в pragma с указанием соответствующей задачи:
+Также, если вы понимаете, что в ближайшее время варнинг починить не получится, например, вы добавили атрибут [Obsolete], а затем вылетело много <abbr title="CS0618: A member was marked with the Obsolete attribute, such that a warning will be issued when the member is referenced.">CS0618</abbr> варнингов, то лучше будет обернуть все места в pragma с указанием соответствующей задачи:
 
 ```cs
 [Obsolete("Use X instead of this method")]
