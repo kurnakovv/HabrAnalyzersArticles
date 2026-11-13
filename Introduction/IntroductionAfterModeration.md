@@ -138,7 +138,7 @@
 
 И если вы думаете, что эта проблема была только у StyleCop, то вы ошибаетесь. Почти каждый популярный анализатор агрессивно навязывает полное подключение. Почему-то они считают, что все их правила очень полезны и должны быть включены по умолчанию. Самый яркий пример - это [CSharpier](https://github.com/belav/csharpier).
 
-[Цитата](https://www.reddit.com/r/dotnet/comments/1k5hsea/comment/moz4kc4/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+[Цитата](https://www.reddit.com/r/dotnet/comments/1k5hsea/comment/moz4kc4)
 > CSharpier is an opinionated formatter which does not provide options. The point is to format your code without any input from you and to avoid teams getting into debates about which options to set which way.
 >
 > The "Why Prettier" page does a better job than I can of explaining the benefits - https://prettier.io/docs/why-prettier
