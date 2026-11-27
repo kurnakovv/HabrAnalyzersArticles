@@ -651,168 +651,176 @@ Sync complete. Removed 2 file(s); resolved 2 filter(s). 6 filter(s) still alive.
 
 [Подробнее про этот функционал](https://github.com/kurnakovv/biak/wiki/WarningsBaselineOverview).
 
-Хочу отметить некоторые моменты, к которым мы пришли с командой:
-* NuGet | Варнинги, которые указывают на уязвимости в библиотеке, лучше оставить как warning, следующим образом:
-  ```xml
-  <WarningsNotAsErrors>NU1901,NU1902,NU1903,NU1904</WarningsNotAsErrors>
-  ```
+Хочу дать несколько советом по поводу варнингов, к которым мы пришли с командой после внедрения TreatWarningsAsErrors.
 
-  Причина - эти варнинги могут возникнуть в любой момент, а починить их в ту же секунду не всегда возможно. Более того, нужно время на тестирование, чтобы убедиться, что новые версии пакетов ничего не сломали. Так что мы пришли к выводу, что эти варнинги оставляем как есть, но стараемся не затягивать с их починкой.
+## NuGet
+Варнинги, которые указывают на уязвимости в [NuGet пакетах](https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1901-nu1904), лучше оставить как warning, следующим образом:
+```xml
+<WarningsNotAsErrors>NU1901,NU1902,NU1903,NU1904</WarningsNotAsErrors>
+```
 
----
+Причина - эти варнинги могут возникнуть в любой момент, а починить их в ту же секунду не всегда возможно. Более того, нужно время на тестирование, чтобы убедиться, что новые версии пакетов ничего не сломали. Так что мы пришли к выводу, что эти варнинги оставляем как есть, но стараемся не затягивать с их починкой.
 
-* TreatWarningsAsErrors=false | Локальная разработка иногда требует создания варнингов. Например, когда нужно создать переменную, которая нигде не используется, чтобы что-то подебажить. Или создать пустой `try catch` с `ex`, который никуда не пишется (по той же причине). Поэтому мы пришли к выводу, что для локальной разработки оставляем варнинги для всех кодов, а для CI/CD делаем варнинги ошибками.
+Можно мне возразить и сказать, что NU1904 (critical) лучше оставить как ошибку, а вот NU1901 (low), NU1902 (moderate) и NU1903 (high) оставить как есть. Тут смотрите сами. Лично нам хватает устного договора, а получить случайную ошибку при релизе прода - неприятно. Но и я могу понять позицию, при которой не хочется закрывать глаза на эти варнинги, т.к. не все в команде будут добросовестно обновлять пакеты. В таком случае я могу порекомендовать подумать в сторону создания GitHub Action, который будет давать время на обновление пакетов, а если за это время вы не успели сделать это, то ломать CI.
 
-  Как это сделать?
-  Либо докинуть флаг к билду:
-  ```bash
-  dotnet build /p:TreatWarningsAsErrors=true
-  ```
+Псевдокод:
+```yaml
+- name: Check NuGet vulnerabilities
+  uses: YOUR-ORG/nuget-vulnerability-grace-period@v1
+  with:
+    grace-periods: |
+      NU1901=7d
+      NU1902=7d
+      NU1903=24h
+      NU1904=2h
+```
 
-  Либо добавить условие в атрибут:
-  ```xml
-  <TreatWarningsAsErrors Condition="'$(TREAT_WARNINGS_AS_ERRORS)' == 'true'">true</TreatWarningsAsErrors>
-  <WarningsNotAsErrors>NU1901,NU1902,NU1903,NU1904</WarningsNotAsErrors>
-  ```
+Возможно, в будущем я навайбкодю что-то похожее, но пока это просто идея.
 
-  И добавить переменную TREAT_WARNINGS_AS_ERRORS в GitHub action:
-  ```yaml
-  jobs:
-    build:
-      runs-on: ubuntu-latest
+## Локальный TreatWarningsAsErrors
+Локальная разработка иногда требует создания варнингов. Например, когда нужно создать переменную, которая нигде не используется, чтобы что-то подебажить. Или создать пустой `try catch` с `ex`, который никуда не пишется (по той же причине). Поэтому мы пришли к выводу, что для локальной разработки оставляем варнинги для всех кодов, а для CI/CD делаем варнинги ошибками.
 
-      env:
-        TREAT_WARNINGS_AS_ERRORS: true # Это значение пробросится в Directory.Build.props
+Как это сделать?
+Либо докинуть флаг к билду:
+```bash
+dotnet build /p:TreatWarningsAsErrors=true
+```
 
-      steps:
-        ...
-  ```
+Либо добавить условие в атрибут:
+```xml
+<TreatWarningsAsErrors Condition="'$(TREAT_WARNINGS_AS_ERRORS)' == 'true'">true</TreatWarningsAsErrors>
+<WarningsNotAsErrors>NU1901,NU1902,NU1903,NU1904</WarningsNotAsErrors>
+```
 
----
+И добавить переменную TREAT_WARNINGS_AS_ERRORS в GitHub action:
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TREAT_WARNINGS_AS_ERRORS: true # Это значение пробросится в Directory.Build.props
+    steps:
+      ...
+```
 
-* NoWarn | Есть ситуации, когда варнинг нужно отключить полностью. Особенно когда никак нельзя повлиять на специфику некоторых библиотек или фреймворков. Или же когда проект будет удалён в ближайшем будущем и чинить текущие варнинги нет необходимости.
+## NoWarn
 
-  <spoiler title="Пример использования NoWarn для конкретных пакетов">
+Есть ситуации, когда варнинг нужно отключить полностью. Особенно когда никак нельзя повлиять на специфику некоторых библиотек или фреймворков. Или же когда проект будет удалён в ближайшем будущем и чинить текущие варнинги нет необходимости.
 
-  ```xml
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.6.0" />
-      <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
-      <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.17.0" />
-      <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.17.0" />
-      <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
-      
-      <!-- NoWarn из-за специфики работы библиотеки -->
-      <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.17.0-beta.1" NoWarn="NU5104" />
-      <PackageReference Include="OpenTelemetry.Instrumentation.Quartz" Version="1.17.0-beta.1" NoWarn="NU5104" />
+<spoiler title="Пример использования NoWarn для конкретных пакетов">
 
-      <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.17.0" />
-    </ItemGroup>
-  ```
+```xml
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.6.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.17.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.17.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
+    
+    <!-- NoWarn из-за специфики работы библиотеки -->
+    <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.17.0-beta.1" NoWarn="NU5104" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Quartz" Version="1.17.0-beta.1" NoWarn="NU5104" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.17.0" />
+  </ItemGroup>
+```
 
-  </spoiler>
+</spoiler>
 
-  А вот [пример глобального отключения варнингов](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#nowarn):
-  ```xml
-  <NoWarn>$(NoWarn);1591,1573</NoWarn>
-  ```
-  Для легаси проекта мы сделали так, потому что этим функционалом уже никто не пользовался, а нужен он был только для обратной совместимости.
+А вот [пример глобального отключения варнингов](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#nowarn):
+```xml
+<NoWarn>$(NoWarn);1591,1573</NoWarn>
+```
+Для легаси проекта мы сделали так, потому что этим функционалом уже никто не пользовался, а нужен он был только для обратной совместимости.
 
----
+## Точечные подавления через pragma
+Есть места в коде, где варнинг сработал как false positive, но отключать его глобально не стоит.
 
-* Точечные подавления | Есть места в коде, где варнинг сработал как false positive, но отключать его глобально не стоит.
+Например, можно использовать [pragma](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/preprocessor-directives#pragmas):
+```cs
+public class UserSettings
+{
+    /// <summary>
+    /// Legacy-свойство, которое сохраняется в JSON для обратной совместимости.
+    /// В коде приложения используйте GetName().
+    /// Нельзя сделать private get, т.к. сериализация jsonb не сработает.
+    /// </summary>
+    [Obsolete("Используйте GetName() вместо этого свойства")]
+#pragma warning disable CS9042
+    public required string Name { get; set; }
+#pragma warning restore CS9042
+    public string GetName()
+    {
+        // Name нельзя использовать в обычном коде:
+        // свойство оставлено только как часть JSON-контракта.
+#pragma warning disable CS0618
+        return Name.Trim();
+#pragma warning restore CS0618
+    }
+}
+```
 
-  Например, можно использовать [pragma](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/preprocessor-directives#pragmas):
-  ```cs
-  public class UserSettings
-  {
-      /// <summary>
-      /// Legacy-свойство, которое сохраняется в JSON для обратной совместимости.
-      /// В коде приложения используйте GetName().
-      /// Нельзя сделать private get, т.к. сериализация jsonb не сработает.
-      /// </summary>
-      [Obsolete("Используйте GetName() вместо этого свойства")]
-  #pragma warning disable CS9042
-      public required string Name { get; set; }
-  #pragma warning restore CS9042
+Если бы это была простая бизнес модель, то мы бы использовали private get, но т.к. это свойство используется в jsonb, то приходится использовать такие костыли.
 
-      public string GetName()
-      {
-          // Name нельзя использовать в обычном коде:
-          // свойство оставлено только как часть JSON-контракта.
-  #pragma warning disable CS0618
-          return Name.Trim();
-  #pragma warning restore CS0618
+pragma также можно использовать не только для CSxxxx правил, но и для других правил анализатора на основе Roslyn (CAxxxx, IDExxxx, и т. д.), но об этом мы поговорим в следующих статьях.
 
-      }
-  }
-  ```
+Также встречаются false positive. Например, для некоторых nullable конструкций:
+```cs
+public UserDto GetDto()
+{
+    User user = Get();
+    bool isValidCompany = user.Company != null && user.Company.Name != "E Corp";
+    return new UserDto
+    {
+        Name = user.Name,
+        CompanyNames = isValidCompany ? [user.Company!.Name] : [], // false positive, используем "!"
+        Descriptions = isValidCompany ? [user.Company!.Description] : [], // false positive, используем "!"
+        Websites = isValidCompany ? [user.Company!.Website] : [], // false positive, используем "!"
+    };
+}
+```
 
-  Если бы это была простая бизнес модель, то мы бы использовали private get, но т.к. это свойство используется в jsonb, то приходится использовать такие костыли.
+Как вы видите, мы уже проверили значение на null, но анализатор всё равно требует дополнительной проверки.
 
-  pragma также можно использовать не только для CSxxxx правил, но и для других правил анализатора на основе Roslyn (CAxxxx, IDExxxx, и т. д.), но об этом мы поговорим в следующих статьях.
+Будьте осторожнее с этим, т.к. можно случайно неправильно подавить ошибку, например:
+```cs
+if (user != null)
+{
+    throw new ObjectNotFoundException("User not found");
+}
+// Глупый анализатор! Я сверху добавил проверку!!!
+return user!.Name;
+```
 
-  Также встречаются false positive. Например, для некоторых nullable конструкций:
-  ```cs
-  public UserDto GetDto()
-  {
-      User user = Get();
-      bool isValidCompany = user.Company != null && user.Company.Name != "E Corp";
-      return new UserDto
-      {
-          Name = user.Name,
-          CompanyNames = isValidCompany ? [user.Company!.Name] : [], // false positive, используем "!"
-          Descriptions = isValidCompany ? [user.Company!.Description] : [], // false positive, используем "!"
-          Websites = isValidCompany ? [user.Company!.Website] : [], // false positive, используем "!"
-      };
-  }
-  ```
-
-  Как вы видите, мы уже проверили значение на null, но анализатор всё равно требует дополнительной проверки.
-
-  Будьте осторожнее с этим, т.к. можно случайно неправильно подавить ошибку, например:
-  ```cs
-  if (user != null)
-  {
-      throw new ObjectNotFoundException("User not found");
-  }
-
-  // Глупый анализатор! Я сверху добавил проверку!!!
-  return user!.Name;
-  ```
-
-  Также можно [через атрибуты](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis) указывать поведение, связанное с null.
+Также можно [через атрибуты](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis) указывать поведение, связанное с null.
   
-  <spoiler title="Пример использования NotNullWhen атрибута">
+<spoiler title="Пример использования NotNullWhen атрибута">
 
-  ```cs
-  // Сигнатура метода берёт на себя ответственность за то, что если возвращаемое значение будет true, то message не будет null.
-  bool TryGetMessage(string key, [NotNullWhen(true)] out string? message)
-  {
-      if (_messageMap.ContainsKey(key))
-      {
-          message = _messageMap[key];
-      }
-      else
-      {
-          message = null;
-      }
-      return message is not null;
-  }
+```cs
+// Сигнатура метода берёт на себя ответственность за то, что если возвращаемое значение будет true, то message не будет null.
+bool TryGetMessage(string key, [NotNullWhen(true)] out string? message)
+{
+    if (_messageMap.ContainsKey(key))
+    {
+        message = _messageMap[key];
+    }
+    else
+    {
+        message = null;
+    }
+    return message is not null;
+}
+// ---
+if (TryGetMessage("some-key", out var message))
+{
+    int length = message.Length; // CS8602 не возникает, т.к. сигнатура уже взяла на себя ответственность.
+}
+else
+{
+    int length = message.Length; // CS8602: Dereference of a possibly null reference
+}
+```
 
-  // ---
-
-  if (TryGetMessage("some-key", out var message))
-  {
-      int length = message.Length; // CS8602 не возникает, т.к. сигнатура уже взяла на себя ответственность.
-  }
-  else
-  {
-      int length = message.Length; // CS8602: Dereference of a possibly null reference
-  }
-  ```
-
-  </spoiler>
+</spoiler>
 
 
 <anchor>способ_миграции_в_доке_подход_file_by_file</anchor>
