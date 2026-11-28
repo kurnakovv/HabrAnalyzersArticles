@@ -712,18 +712,18 @@ jobs:
 <spoiler title="Пример использования NoWarn для конкретных пакетов">
 
 ```xml
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.6.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.17.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.17.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
-    
-    <!-- NoWarn из-за специфики работы библиотеки -->
-    <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.17.0-beta.1" NoWarn="NU5104" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Quartz" Version="1.17.0-beta.1" NoWarn="NU5104" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.17.0" />
-  </ItemGroup>
+<ItemGroup>
+  <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.6.0" />
+  <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
+  <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.17.0" />
+  <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.17.0" />
+  <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
+  
+  <!-- NoWarn из-за специфики работы библиотеки -->
+  <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.17.0-beta.1" NoWarn="NU5104" />
+  <PackageReference Include="OpenTelemetry.Instrumentation.Quartz" Version="1.17.0-beta.1" NoWarn="NU5104" />
+  <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.17.0" />
+</ItemGroup>
 ```
 
 </spoiler>
@@ -732,7 +732,9 @@ jobs:
 ```xml
 <NoWarn>$(NoWarn);1591,1573</NoWarn>
 ```
-Для легаси проекта мы сделали так, потому что этим функционалом уже никто не пользовался, а нужен он был только для обратной совместимости.
+Мы сделали у себя так для легаси проекта, потому что этим функционалом уже никто не пользовался, а нужен он был исключительно для обратной совместимости.
+
+Но будьте осторожнее с этим: можно сильно увлечься и отключать что-то не по необходимости, а просто из-за лени. Причём лень будет всячески оправдываться, мол: "Я точно потом это починю, а пока отключим" или "Давай закроем это, пока никто не видит, а потом, возможно, вернёмся к этому" и т. д. Отключайте только тогда, когда это действительно необходимо. И самое главное - не обманывайте себя когда будете что-то отключать.
 
 ## Точечные подавления через pragma
 Есть места в коде, где варнинг сработал как false positive, но отключать его глобально не стоит.
