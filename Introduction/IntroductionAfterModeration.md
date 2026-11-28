@@ -767,6 +767,7 @@ public class UserSettings
 
 pragma также можно использовать не только для CSxxxx правил, но и для других правил анализатора на основе Roslyn (CAxxxx, IDExxxx, и т. д.), но об этом мы поговорим в следующих статьях.
 
+## Точечные подавления через оператор null-forgiving "!"
 Также встречаются false positive. Например, для некоторых nullable конструкций:
 ```cs
 public UserDto GetDto()
@@ -795,6 +796,7 @@ if (user != null)
 return user!.Name;
 ```
 
+## Точечные подавления через null атрибуты
 Также можно [через атрибуты](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis) указывать поведение, связанное с null.
   
 <spoiler title="Пример использования NotNullWhen атрибута">
